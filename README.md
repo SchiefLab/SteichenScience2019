@@ -17,50 +17,101 @@ The compressed CSV file is avaialbe for download [here](https://steichenetalpubl
 
 **Caution - the compressed CSV file is 100 GB while the uncompressed file is over 700GB**
 
-The analyzed CSV files contain annotations from [AbStar](https://github.com/briney/abstar) as well as clustering information with the following fields:
+The analyzed CSV files contains the follwoing annotations from [AbStar](https://github.com/briney/abstar) as well as several clustering and other metadata fields.
 
+
+### Abstar Annotations 
 | Name        | Description     |
 | ------------- |:-------------:| 
 | _id      | hash id of sequence|
 | chain     | heavy or light      | 
-| cdr3_aa | CDR3 amino acid sequence      |   
-| cdr3_aa | CDR3 amino acid sequence      |   
-| cdr3_aa | CDR3 amino acid sequence      |   
-| cdr3_aa | CDR3 amino acid sequence      |   
-| cdr3_aa | CDR3 amino acid sequence      |   
-| cdr3_aa | CDR3 amino acid sequence      |   
-| cdr3_aa | CDR3 amino acid sequence      |   
-| cdr3_aa | CDR3 amino acid sequence      |   
+| cdr3_aa | CDR3 amino acid sequence, IMGT definition      |   
+| cdr3_nt | CDR3 amino acid sequence, IMGT definition      |   
+| junct_nt | Junctional nucleotide sequence as defined by IMGT     |   
+| isotype | Antibody Isotype, e.g. IgM, IgG etc..|   
+| vdj_aa | The V,D and J gene segment amino acid sequences |   
+| vdj_nt | The V,D and J gene segment nucletodie sequences|   
+| v_full | The full V gene segment name, e.g. IGHV1-69*01      |   
+| v_fam | The V gene segment family, e.g. IGHV1       |   
+| v_gene | The V gene segment, e.g. IGHV1-69  |   
+| d_full | The full D gene segment name, e.g. IGHD3-3*01      |   
+| d_fam | The D gene segment family, e.g. IGHD3       |   
+| d_gene | The D gene segment, e.g. IGHD3-3  |   
+| j_full | The full J gene segment name, e.g. IGHJ6*01      |   
+| j_gene | The J gene segment, e.g. IGHJ6   |
+
+### Clustering Metadata 
+
+| Name        | Description     |
+| ------------- |:-------------:| 
+| donor      | The full donor name, e.g donor_316188|
+| collection      | The demultiplexed technical replicate collection specification |
+| generation      | The sequencing generation, see below|
+| method      | The sequencing platform used, e.g. HiSeq, see below|
+| ez_donor      | An integer based designation of the donor |
+| unique_donors      | How many unique donors this sequece cluster was found in |
+| unique_mRNA      | How many mRNA transcripts were found across replicates |
+| original_cursor      | Schief Lab record keeping|
+| original_collection      | Schief Lab record keeping|
+
+
+### Method
+
+The method designation is either HiSeq, NextSeq or Clustered HiSeq (cHiSeq).
+
+
+### Generation
+
+Generations correspond to the the sequencing generation as obtained by the Schief Lab. Generation 1 was the first four donors which were run through multiple independent HiSeq and NextSeq runs. Generation 2 is the next 8 donors in which a unique molecular identifier (UMI) was used to group PCR bias before HiSeq. Generation 3 was the last two donors using HiSeq and UMIs.
+
+### Unique Donors/Unique mRNA
+
+The number of donors each sequence was found in is listed here. The Unique mRNA corresponds to the amount of times a sequence was found in the same donor but multiple collections. Each collection corresponds to an individual PCR reaction from different mRNA preps. 
+
+# Quering Datasets with PySpark/Zeppelin
+
+While we provide the analyzed CSV and raw sequencing reads for the user to subject to their own sequence analysis pipelines, we found that a managed Hadoop cluster via Spark was the only database implementation that could handle the large datasets with relatively low overhead.
+
+We recoomend [Amazon Web Services Elastic Map Reduce (EMR) service](https://aws.amazon.com/emr/) which has the option to automatically setup a managed [Spark Cluster](https://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-spark.html). AWS has the added conviencice of allowing the user you to designate the amount of worker nodes. More nodes mean faster queries but will have a higher cost.
+
+Finally, while you can run any given Spark Job by writing a custom application in Scala, we find it easiest to interact with Spark through a notebook implementation called [Zeppelin](https://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-zeppelin.html) (think Jupyter notebooks to python). Zeppelin automatically configures your Spark app, and will automatically distribute your queries across all available nodes.
+
+## Changing CSV to Parquet File Format
+
+The Hadoop ecosystem uses a column based format called Parquet. PySpark can be used to read in CSV files and store them as parquet. Optionally you can read in CSV files to your straight to your spark dataframe, but will take a lot of time.
+
+```python
+
+##CSV2Parquet.py
+from pyspark import SparkContext
+from pyspark.sql import SQLContext
+
+#Start with Spark Context
+sc = SparkContext(appName="CSV2Parquet")
+
+#Change to SQL context 
+sql = SQLContext(sc)
+
+##S3 bucket link to merged CSV
+csv_file = "s3://steichenetalpublicdata/analyzed_sequences/AllDataMerged.csv.gz"
+
+#Read CSV to DataFrame
+df = (sql.read
+          .format("com.databricks.spark.csv")
+          .option("header", "true")
+          .load(csv_file))
+
+#Output path can also be an S3 bucket
+p_path = "myoutputpath.parquet"
+df.write.parquet(p_path, mode='overwrite')
+```
 
 
 
 
-'chain', 
-'cdr3_aa', 
-'cdr3_nt', 
-'isotype', 
-'junc_nt', 
-'vdj_aa', 
-'vdj_nt', 
-'v_full', 
-'v_fam', 
-'v_gene', 
-'d_full', 
-'d_fam', 
-'d_gene', 
-'j_full', 
-'j_gene', 
-'donor', 
-'collection', 
-'generation', 
-'method', 
-'ez_donor', 
-'unique_donors', 
-'unique_mRNA', 
-'original_cursor', 
-'original_collection'
+## Quering Donors with Zeppelin
 
+In the Zeppelin notebook folder, we have provided an example notebook for quering our dataset.
 
-_id=u'84a65675-7fc2-44b3-87e7-57a931d29665_1', chain=u'heavy', cdr3_aa=u'EGSAGY', cdr3_nt=u'GAGGGATCGGCGGGCTAC', isotype=u'unknown', junc_nt=u'TGTGAGGGATCGGCGGGCTACTGG', vdj_aa=u'VCGVPETLLRSLWIHV**FLEGVERVGSMERDGGEKYYVDSVKGRFTISRDNAKSSLFLQMNSLRADDTAVYYCEGSAGYWGQGTLVTVPS', vdj_nt=u'GTCTGTGGGGTCCCTGAGACTCTCCTGCGCAGCCTCTGGATTCACGTTTAGTAATTCTTGGAGGGGGTGGAGCGGGTGGGCTCCATGGAACGAGATGGAGGTGAGAAATACTATGTGGACTCTGTGAAGGGCCGATTCACCATTTCCAGAGACAACGCCAAGAGCTCACTGTTTTTGCAAATGAATAGCCTGAGAGCCGACGACACGGCTGTATATTATTGTGAGGGATCGGCGGGCTACTGGGGCCAGGGAACCCTGGTCACCGTCCCCTCAG', v_full=u'IGHV3-7*01', v_fam=u'IGHV3', v_gene=u'IGHV3-7', d_full=u'IGHD3-10*01', d_fam=u'IGHD3', d_gene=u'IGHD3-10', j_full=u'IGHJ4*02', j_gene=u'IGHJ4', donor=u'donor_316188', collection=u'D', generation=u'2', method=u'cHiSeq', ez_donor=u'5', unique_donors=u'1', unique_mRNA=u'1', original_cursor=u'eight_donors_clustered', original_collection=u'donor_316188')
 
 
