@@ -1,8 +1,8 @@
 # Steichen *et al* - Data Analysis 
 
-This repository contains instructions for obtaining the Next-Generation Sequencing (NGS) raw reads as well as post-production analysis data found in [J.M Steichen *et al*., *Science* 10.1126/aax4380 (2019)](https://science.sciencemag.org/content/early/2019/10/30/science.aax4380). 
+This repository contains instructions for obtaining the Next-Generation Sequencing (NGS) reads as well as post-production analysis data found in [J.M Steichen *et al*., *Science* 10.1126/aax4380 (2019)](https://science.sciencemag.org/content/early/2019/10/30/science.aax4380). 
 
-In addition, it contains example [Zeppelin](https://zeppelin.apache.org/) notebooks containing [PySpark](https://spark.apache.org/docs/0.9.0/python-programming-guide.html) code used to execute the analysis.
+In addition, it contains an example [Zeppelin](https://zeppelin.apache.org/) notebooks containing [PySpark](https://spark.apache.org/docs/0.9.0/python-programming-guide.html) code used to execute the analysis.
 
 ## Obtaining Raw Sequencing Reads
 
@@ -16,6 +16,8 @@ For your convience, the processed raw sequences that were joined, annonated and 
 The compressed CSV file is avaialbe for download [here](https://steichenetalpublicdata.s3-us-west-2.amazonaws.com/analyzed_sequences/AllDataMerged.csv.gz) .
 
 **Caution - the compressed CSV file is 100 GB while the uncompressed file is over 700GB**
+
+In addition, the converted parquet file can be found [here](s3://steichenetalpublicdata/analyzed_sequences/parquet). Instructions for loading and querying can are found below.
 
 The analyzed CSV files contains the follwoing annotations from [AbStar](https://github.com/briney/abstar) as well as several clustering and other metadata fields.
 
