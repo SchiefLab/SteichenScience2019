@@ -6,14 +6,14 @@ In addition this repository contains an example [Zeppelin](https://zeppelin.apac
 
 ## Obtaining Raw Sequencing Reads
 
-Paired reads for NextSeq and HiSeq sequencing are available for download from our publically available Amazon Web Services S3 data bucket found [here](https://console.aws.amazon.com/s3/buckets/steichenetalpublicdata/raw_sequences/?region=us-east-2&tab=overview). For your convienence, we have also deposited paired reads from [Briney *et al*, Nature 2019](https://www.ncbi.nlm.nih.gov/pubmed/30664748) that were used in this study. 
+Paired reads for NextSeq and HiSeq sequencing are available for download from our publicly available Amazon Web Services S3 data bucket found [here](https://console.aws.amazon.com/s3/buckets/steichenetalpublicdata/raw_sequences/?region=us-east-2&tab=overview). For your convenience, we have also deposited paired reads from [Briney *et al*, Nature 2019](https://www.ncbi.nlm.nih.gov/pubmed/30664748) that were used in this study. 
 
 
 ## Obtaining Clustered Sequences
 
-For your convience, the processed raw sequences that were joined, annonated and clustered are also available as a compressed csv file. It is these sequences that were analyzed in the manuscript. You may use your own database framework to analyze the clustered sequences in the csv file. 
+For your convenience, the processed raw sequences that were joined, annotated and clustered are also available as a compressed csv file. It is these sequences that were analyzed in the manuscript. You may use your own database framework to analyze the clustered sequences in the csv file. 
 
-The compressed csv file is avaialbe for download [here](s3://steichenetalpublicdata/analyzed_sequences/AllDataMerged.csv.gz) .
+The compressed csv file is available for download [here](s3://steichenetalpublicdata/analyzed_sequences/AllDataMerged.csv.gz) .
 
 **Caution - the compressed csv file is 100 GB while the uncompressed file is over 700GB**
 
@@ -32,7 +32,7 @@ The csv file contains the following annotations from [AbStar](https://github.com
 | junct_nt | Junctional nucleotide sequence as defined by IMGT     |   
 | isotype | Antibody Isotype, e.g. IgM, IgG etc..|   
 | vdj_aa | The V,D and J gene segment amino acid sequences |   
-| vdj_nt | The V,D and J gene segment nucletodie sequences|   
+| vdj_nt | The V,D and J gene segment nucleotide sequences|   
 | v_full | The full V gene segment name, e.g. IGHV1-69*01      |   
 | v_fam | The V gene segment family, e.g. IGHV1       |   
 | v_gene | The V gene segment, e.g. IGHV1-69  |   
@@ -51,7 +51,7 @@ The csv file contains the following annotations from [AbStar](https://github.com
 | generation      | The sequencing generation, see below|
 | method      | The sequencing platform used, e.g. HiSeq, see below|
 | ez_donor      | An integer based designation of the donor |
-| unique_donors      | How many unique donors this sequece cluster was found in |
+| unique_donors      | How many unique donors this sequence cluster was found in |
 | unique_mRNA      | How many mRNA transcripts were found across replicates |
 | original_cursor      | Legacy field, not needed|
 | original_collection      | Legacy field, not needed|
@@ -70,11 +70,11 @@ Generations correspond to the the sequencing generation as obtained during the c
 
 The number of donors each sequence was found in is listed here. The Unique mRNA corresponds to the number of times a sequence was found in the same donor but in multiple collections. Each collection corresponds to an individual PCR reaction from different mRNA preps. 
 
-# Quering Datasets with PySpark/Zeppelin
+# Querying Datasets with PySpark/Zeppelin
 
 While we provide the analyzed CSV and raw sequencing reads for the user to subject to their own sequence analysis pipelines, we found that a managed Hadoop cluster via Spark was the only database implementation that could handle the large datasets with relatively low overhead.
 
-We recommend [Amazon Web Services Elastic Map Reduce (EMR) service](https://aws.amazon.com/emr/) which has the option to automatically setup a managed [Spark Cluster](https://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-spark.html). AWS has the added conviencice of allowing the user you to designate the amount of worker nodes. More nodes mean faster queries but will have a higher cost.
+We recommend [Amazon Web Services Elastic Map Reduce (EMR) service](https://aws.amazon.com/emr/) which has the option to automatically setup a managed [Spark Cluster](https://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-spark.html). AWS has the added convenience of allowing the user you to designate the amount of worker nodes. More nodes mean faster queries but will have a higher cost.
 
 Finally, while you can run any given Spark Job by writing a custom application in Scala, we find it easiest to interact with Spark through a notebook implementation called [Zeppelin](https://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-zeppelin.html) (think Jupyter notebooks to python). Zeppelin automatically configures your Spark app, and will automatically distribute your queries across all available nodes.
 
@@ -111,8 +111,8 @@ df.write.parquet(p_path, mode='overwrite')
 
 
 
-## Quering Donors with Zeppelin
+## Querying Donors with Zeppelin
 
-In the Zeppelin notebook folder, we have provided an [example notebooks](https://github.com/SchiefLab/HIVPrimeDonors/tree/master/zeppelin_noteboks) for quering our dataset. This includes an example  on how to load parquet data as well as an example query using BG18 germline definitions used in Steichen et al.
+In the Zeppelin notebook folder, we have provided an [example notebooks](https://github.com/SchiefLab/HIVPrimeDonors/tree/master/zeppelin_noteboks) for querying our dataset. This includes an example  on how to load parquet data as well as an example query using BG18 germline definitions used in Steichen et al.
 
 
