@@ -114,4 +114,7 @@ df.write.parquet(p_path, mode='overwrite')
 
 In the Zeppelin notebook folder, we have provided an [example notebook](https://github.com/SchiefLab/HIVPrimeDonors/tree/master/zeppelin_notebooks) for querying our dataset. This includes an example showing how to load parquet data as well as an example query using BG18 germline definitions used in Steichen et al.
 
+**Note** In order to view the Zeppelin notebook, you will need to upload the JSON file to a Zeppelin notebook server.
+
+
 
