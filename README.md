@@ -113,6 +113,6 @@ df.write.parquet(p_path, mode='overwrite')
 
 ## Querying Donors with Zeppelin
 
-In the Zeppelin notebook folder, we have provided an [example notebooks](https://github.com/SchiefLab/HIVPrimeDonors/tree/master/zeppelin_noteboks) for querying our dataset. This includes an example  on how to load parquet data as well as an example query using BG18 germline definitions used in Steichen et al.
+In the Zeppelin notebook folder, we have provided an [example notebook](https://github.com/SchiefLab/HIVPrimeDonors/tree/master/zeppelin_noteboks) for querying our dataset. This includes an example  on how to load parquet data as well as an example query using BG18 germline definitions used in Steichen et al.
 
 
