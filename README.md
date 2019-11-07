@@ -13,7 +13,7 @@ Paired reads for NextSeq and HiSeq sequencing are available for download from ou
 
 For your convenience, the processed raw sequences that were joined, annotated and clustered are also available as a compressed csv file. It is these sequences that were analyzed in the manuscript. You may use your own database framework to analyze the clustered sequences in the csv file. 
 
-The compressed csv file is available for download [here](s3://steichenetalpublicdata/analyzed_sequences/AllDataMerged.csv.gz) .
+The compressed csv file is available for download [here](https://steichenetalpublicdata.s3-us-west-2.amazonaws.com/analyzed_sequences/AllDataMerged.csv.gz).
 
 **Caution - the compressed csv file is 100 GB while the uncompressed file is over 700GB**
 
