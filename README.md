@@ -17,7 +17,7 @@ The compressed csv file is available for download [here](https://steichenetalpub
 
 **Caution - the compressed csv file is 100 GB while the uncompressed file is over 700GB**
 
-In addition, we are also providing all the sequences in the csv file as a converted parquet file which is more convenient for those that wish to carry out analyses using Amazon EMR (see below), as we did in this study. The parquet file can be found [here](https://steichenetalpublicdata.s3-us-west-2.amazonaws.com/analyzed_sequences/?region=us-west-2&tab=overview). Instructions for loading and querying parquet files are found below.
+In addition, we are also providing all the sequences in the csv file as a converted parquet file which is more convenient for those that wish to carry out analyses using Amazon EMR (see below), as we did in this study. The parquet file can be found at ```s3://steichenetalpublicdata/analyzed_sequences/parquet```. Instructions for loading and querying parquet files are found below.
 
 The fields in the csv file include the following annotations from [AbStar](https://github.com/briney/abstar) as well as several clustering and other metadata fields.
 
