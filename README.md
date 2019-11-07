@@ -1,25 +1,25 @@
 # Steichen *et al* - Data Analysis 
 
-This repository contains instructions for obtaining the Next-Generation Sequencing (NGS) reads as well as post-production analysis data found in [J.M Steichen *et al*., *Science* 10.1126/aax4380 (2019)](https://science.sciencemag.org/content/early/2019/10/30/science.aax4380). 
+This repository contains instructions for obtaining the Next-Generation Sequencing (NGS) raw reads as well as post-production formatted sequencing data used in [J.M Steichen *et al*., *Science* 10.1126/aax4380 (2019)](https://science.sciencemag.org/content/early/2019/10/30/science.aax4380). 
 
-In addition this repository contains an example [Zeppelin](https://zeppelin.apache.org/) notebook containing [PySpark](https://spark.apache.org/docs/0.9.0/python-programming-guide.html) code used to execute the analysis.
+In addition, this repository contains an example [Zeppelin](https://zeppelin.apache.org/) notebook containing [PySpark](https://spark.apache.org/docs/0.9.0/python-programming-guide.html) code used to execute searches on the sequencing data.
 
-## Obtaining Raw Sequencing Reads
+## Raw Sequencing Reads
 
-Paired reads for NextSeq and HiSeq sequencing are available for download from our publicly available Amazon Web Services S3 data bucket found [here](https://console.aws.amazon.com/s3/buckets/steichenetalpublicdata/raw_sequences/?region=us-east-2&tab=overview). For your convenience, we have also deposited paired reads from [Briney *et al*, Nature 2019](https://www.ncbi.nlm.nih.gov/pubmed/30664748) that were used in this study. 
+Paired reads for NextSeq and HiSeq sequencing data obtained in this study are available for download from our publicly available Amazon Web Services S3 data bucket found [here](https://console.aws.amazon.com/s3/buckets/steichenetalpublicdata/raw_sequences/?region=us-east-2&tab=overview). Paired reads from HiSeq sequencing data from [Briney *et al*, Nature 2019](https://www.ncbi.nlm.nih.gov/pubmed/30664748) that were used in Steichen et al are also avaialable in our S3 data bucket using the above link. 
 
 
-## Obtaining Clustered Sequences
+## Joined, Annotated, and Clustered Sequences
 
-For your convenience, the processed raw sequences that were joined, annotated and clustered are also available as a compressed csv file. It is these sequences that were analyzed in the manuscript. You may use your own database framework to analyze the clustered sequences in the csv file. 
+Beyond the raw reads, we are also making available the joined, annotated and clustered sequences, as a compressed csv file. It is these sequences that were analyzed in the manuscript. You may use your own database framework to analyze the clustered sequences in the csv file. 
 
 The compressed csv file is available for download [here](https://steichenetalpublicdata.s3-us-west-2.amazonaws.com/analyzed_sequences/AllDataMerged.csv.gz).
 
 **Caution - the compressed csv file is 100 GB while the uncompressed file is over 700GB**
 
-In addition, we are also providing all the sequences in the csv file as a converted parquet file which was used in our analysis. The parquet file can be found [here](s3://steichenetalpublicdata/analyzed_sequences/parquet). Instructions for loading and querying parquet files are found below.
+In addition, we are also providing all the sequences in the csv file as a converted parquet file which is more convenient for those that wish to carry out analyses using Amazon EMR (see below), as we did in this study. The parquet file can be found [here](s3://steichenetalpublicdata/analyzed_sequences/parquet). Instructions for loading and querying parquet files are found below.
 
-The csv file contains the following annotations from [AbStar](https://github.com/briney/abstar) as well as several clustering and other metadata fields.
+The fields in the csv file include the following annotations from [AbStar](https://github.com/briney/abstar) as well as several clustering and other metadata fields.
 
 
 ### Abstar Annotations 
@@ -51,8 +51,8 @@ The csv file contains the following annotations from [AbStar](https://github.com
 | generation      | The sequencing generation, see below|
 | method      | The sequencing platform used, e.g. HiSeq, see below|
 | ez_donor      | An integer based designation of the donor |
-| unique_donors      | How many unique donors this sequence cluster was found in |
-| unique_mRNA      | How many mRNA transcripts were found across replicates |
+| unique_donors      | How many unique donors this sequence cluster was found in, see below |
+| unique_mRNA      | How many mRNA transcripts were found across replicates, see below |
 | original_cursor      | Legacy field, not needed|
 | original_collection      | Legacy field, not needed|
 
@@ -61,26 +61,25 @@ The csv file contains the following annotations from [AbStar](https://github.com
 
 The method designation is either HiSeq, NextSeq or Clustered HiSeq (cHiSeq).
 
-
 ### Generation
 
 Generations correspond to the the sequencing generation as obtained during the course of the study. Generation 1 was the first four donors which were run through multiple independent HiSeq and NextSeq runs. Generation 2 is the next 8 donors in which a unique molecular identifier (UMI) was used to group PCR bias before HiSeq. Generation 3 was the last two donors using HiSeq and UMIs.
 
-### Unique Donors/Unique mRNA
+### Unique mRNA
 
-The number of donors each sequence was found in is listed here. The Unique mRNA corresponds to the number of times a sequence was found in the same donor but in multiple collections. Each collection corresponds to an individual PCR reaction from different mRNA preps. 
+The Unique mRNA corresponds to the number of times a sequence was found in the same donor but in multiple collections. Each collection corresponds to an individual PCR reaction from different mRNA preps. 
 
 # Querying Datasets with PySpark/Zeppelin
 
-While we provide the analyzed CSV and raw sequencing reads for the user to subject to their own sequence analysis pipelines, we found that a managed Hadoop cluster via Spark was the only database implementation that could handle the large datasets with relatively low overhead.
+While we have provided the sequencing data via formatted csv and raw sequencing reads to enable the user to employ their own sequence analysis pipelines, we found that a managed Hadoop cluster via Spark was an effective database implementation that could handle the large datasets with relatively low overhead.
 
-We recommend [Amazon Web Services Elastic Map Reduce (EMR) service](https://aws.amazon.com/emr/) which has the option to automatically setup a managed [Spark Cluster](https://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-spark.html). AWS has the added convenience of allowing the user you to designate the amount of worker nodes. More nodes mean faster queries but will have a higher cost.
+We recommend [Amazon Web Services Elastic Map Reduce (EMR) service](https://aws.amazon.com/emr/) which has the option to automatically setup a managed [Spark Cluster](https://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-spark.html). AWS has the added convenience of allowing the user you to designate the amount of worker nodes. More nodes means faster queries but will have a higher cost.
 
-Finally, while you can run any given Spark Job by writing a custom application in Scala, we find it easiest to interact with Spark through a notebook implementation called [Zeppelin](https://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-zeppelin.html) (think Jupyter notebooks to python). Zeppelin automatically configures your Spark app, and will automatically distribute your queries across all available nodes.
+Finally, while one can run any given Spark Job by writing a custom application in Scala, we found it easiest to interact with Spark through a notebook implementation called [Zeppelin](https://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-zeppelin.html) (analogous to Jupyter notebooks for Python). Zeppelin automatically configures the user's Spark app, and will automatically distribute the user's queries across all available nodes.
 
 ## Changing CSV to Parquet File Format
 
-The Hadoop ecosystem uses a column based format called Parquet. PySpark can be used to read in CSV files and store them as parquet. Optionally you can read in CSV files to your straight to your spark dataframe, but will take a lot of time.
+The Hadoop ecosystem uses a column based format called Parquet. PySpark can be used to read in CSV files and store them as parquet. Optionally you can read in CSV files directly to your Spark dataframe, but this may take more time.
 
 ```python
 
@@ -113,6 +112,6 @@ df.write.parquet(p_path, mode='overwrite')
 
 ## Querying Donors with Zeppelin
 
-In the Zeppelin notebook folder, we have provided an [example notebook](https://github.com/SchiefLab/HIVPrimeDonors/tree/master/zeppelin_noteboks) for querying our dataset. This includes an example  on how to load parquet data as well as an example query using BG18 germline definitions used in Steichen et al.
+In the Zeppelin notebook folder, we have provided an [example notebook](https://github.com/SchiefLab/HIVPrimeDonors/tree/master/zeppelin_noteboks) for querying our dataset. This includes an example showing how to load parquet data as well as an example query using BG18 germline definitions used in Steichen et al.
 
 
