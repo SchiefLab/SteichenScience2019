@@ -6,7 +6,7 @@ In addition, this repository contains an example [Zeppelin](https://zeppelin.apa
 
 ## Raw Sequencing Reads
 
-Paired reads for NextSeq and HiSeq sequencing data obtained in this study are available for download from our publicly available Amazon Web Services S3 data bucket found [here](https://console.aws.amazon.com/s3/buckets/steichenetalpublicdata/raw_sequences/?region=us-east-2&tab=overview). Paired reads from HiSeq sequencing data from [Briney *et al*, Nature 2019](https://www.ncbi.nlm.nih.gov/pubmed/30664748) that were used in Steichen et al are also avaialable in our S3 data bucket using the above link. 
+Paired reads for NextSeq and HiSeq sequencing data obtained in this study are available for download from our publicly available Amazon Web Services S3 data bucket found [here](https://steichenetalpublicdata.s3-us-west-2.amazonaws.com/raw_sequences/paired_reads.tgz). Paired reads from HiSeq sequencing data from [Briney *et al*, Nature 2019](https://www.ncbi.nlm.nih.gov/pubmed/30664748) that were used in Steichen et al are also avaialable in our S3 data bucket using the above link. 
 
 
 ## Joined, Annotated, and Clustered Sequences
