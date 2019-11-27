@@ -17,7 +17,7 @@ The compressed csv file is available for download [here](https://steichenetalpub
 
 **Caution - the compressed csv file is 100 GB while the uncompressed file is over 700GB**
 
-In addition, we are also providing all the sequences in the csv file as a converted parquet file which is more convenient for those that wish to carry out analyses using Amazon EMR (see below), as we did in this study. The parquet file can be found at ```s3://steichenetalpublicdata/analyzed_sequences/parquet```. Instructions for loading and querying parquet files are found below.
+In addition, we are also providing all the sequences in the csv file as a converted parquet file which is more convenient for those that wish to carry out analyses using Amazon EMR (see below), as we did in this study. The compressed parquet file can be found at [here](https://steichenetalpublicdata.s3-us-west-2.amazonaws.com/analyzed_sequences/parquet.gz). Instructions for loading and querying parquet files are found below.
 
 The fields in the csv file include the following annotations from [AbStar](https://github.com/briney/abstar) as well as several clustering and other metadata fields.
 
@@ -112,7 +112,7 @@ df.write.parquet(p_path, mode='overwrite')
 
 ## Querying Donors with Zeppelin
 
-In the Zeppelin notebook folder, we have provided an [example notebook](https://github.com/SchiefLab/HIVPrimeDonors/tree/master/zeppelin_notebooks) for querying our dataset. This includes an example showing how to load parquet data as well as an example query using BG18 germline definitions used in Steichen et al. Please note, in order to view the Zeppelin notebook, you will need to upload the JSON file to a Zeppelin notebook server.
+In the Zeppelin notebook folder, we have provided an [example notebook](https://github.com/SchiefLab/HIVPrimeDonors/tree/master/zeppelin_notebooks) for querying our dataset. This includes an example showing how to load parquet data as well as an example query using BG18 germline definitions used in Steichen et al. Please note, in order to view the Zeppelin notebook, you will need to upload the Zeppelin JSON file to a Zeppelin notebook server. In addition you must untar the [parquet.tgz](https://steichenetalpublicdata.s3-us-west-2.amazonaws.com/analyzed_sequences/parquet.gz) file and load in the folder into your Zeppelin environment.
 
 
 
